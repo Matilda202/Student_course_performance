@@ -1,0 +1,9 @@
+student_id,course,grade
+1,Programming I,88
+1,Math I,92
+2,Math I,85
+2,Statistics,90
+3,Physics I,78
+4,Programming I,95
+4,Databases,89
+5,Math I,91

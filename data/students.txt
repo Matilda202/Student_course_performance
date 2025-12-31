@@ -1,0 +1,6 @@
+student_id,name,major,year
+1,Alice,Computer Science,1
+2,Bob,Mathematics,2
+3,Charlie,Physics,3
+4,Diana,Computer Science,2
+5,Emma,Mathematics,1
