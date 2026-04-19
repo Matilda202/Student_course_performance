@@ -1,45 +1,58 @@
-# Student Grades Analysis (Pandas Practice)
+# Student Course Performance
 
-This mini project is a simple, real-world style exercise to practice working with **multiple CSV files** using **pandas**, including merging datasets and computing summary statistics.
+A pandas practice project that analyses student grades across multiple courses, using a merge to combine two related datasets.
 
 ## Files
 
-- `students.csv`  
-  Contains student information (id, name, major, year)
+| File | Description |
+|---|---|
+| `data/students.txt` | `student_id`, `name`, `major`, `year` |
+| `data/grades.txt` | `student_id`, `course`, `grade` |
+| `performance_analys.py` | Analysis script |
 
-- `grades.csv`  
-  Contains course grades for students (student_id, course, grade)
+## Dataset overview
 
-## Tasks
+5 students. Majors: Computer Science, Mathematics, Physics. 8 grade rows across 5 courses (Programming I, Math I, Statistics, Physics I, Databases).
 
-1. **Load both CSV files using pandas**
-   - Read `students.csv` and `grades.csv` into DataFrames.
+## Tasks completed
 
-2. **Combine student info with grades**
-   - Merge/join the two DataFrames using `student_id`.
+| # | Task | Pandas technique |
+|---|---|---|
+| 1 | Load both data files | `pd.read_csv()` |
+| 2 | Combine student info with grades | `pd.merge(grades_df, students_df, on='student_id')` |
+| 3 | Average grade per student | `groupby('student_id').mean()` |
+| 4 | Average grade per major | `groupby('major').mean()` |
+| 5 | Students with every grade above 85 | Boolean column + `groupby('name').all()` |
 
-3. **Calculate the average grade per student**
-   - For each student, calculate their mean grade across all courses.
+## Key code patterns
 
-4. **Find the average grade per major**
-   - For each major, calculate the average grade (based on all grades of students in that major).
+```python
+# Merge two DataFrames on a shared key
+merged = pd.merge(grades_df, students_df, on='student_id')
 
-5. **Identify students with all grades above 85**
-   - Find students whose **every** grade is **strictly greater than 85**.
-   - (Tip: This is a group-level condition, not row-level.)
+# Average per student
+merged.groupby('student_id')['grade'].mean()
 
-## Expected Skills Practiced
+# Average per major
+merged.groupby('major')['grade'].mean()
 
-- `pd.read_csv()`
-- `merge()` / joins
-- `groupby()` + aggregations (`mean`, `all`, etc.)
-- boolean filtering
-- basic DataFrame inspection and printing
+# Flag rows, then check that ALL rows in each group are True
+merged['over_85'] = merged['grade'] > 85
+merged.groupby('name')['over_85'].all()
+```
 
-## How to Run
+## What to improve
 
-1. Install dependencies:
-   pip install pandas
+- **Use `student_id` for grouping but display by `name`** — currently the average-grade summary uses `student_id` as the group key; merging back or using `name` directly makes the output easier to read.
+- **Boolean column naming** — `'over 85'` (with a space) is awkward to access; rename to `'over_85'`.
+- **Print descriptive labels** before each result so the console output is self-explanatory.
+- **Filter the final result** — `groupby('name').all()` returns a row for every student (True or False). Add `.loc[lambda x: x]` or boolean indexing to print only the students who meet the threshold.
+- **Script filename note** — the file is named `performance_analys.py` (shortened). Consider renaming to `performance_analysis.py` for clarity.
 
-2. Run your script:
-   python performance_analysis.py
+## How to run
+
+```bash
+pip install pandas
+cd Student_course_performance
+python performance_analys.py
+```
